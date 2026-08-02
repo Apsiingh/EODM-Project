@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Custom Glassmorphism Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+/* Glowing OCR bounding box pulse */
+@keyframes boxPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.6), 0 0 12px rgba(37, 99, 235, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.9), 0 0 20px rgba(37, 99, 235, 0.6);
+  }
+}
+
+.ocr-highlight-active {
+  animation: boxPulse 1.8s infinite ease-in-out;
+}
