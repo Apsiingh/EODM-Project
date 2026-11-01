@@ -270,7 +270,7 @@ Key infrastructure defaults used across development environments:
 | --- | --- | --- |
 | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://localhost:5432/enterprise_ocr` | PostgreSQL connection URL |
 | `SPRING_DATASOURCE_USERNAME` | `postgres` | Database user |
-| `SPRING_DATASOURCE_PASSWORD` | `postgrespassword` | Database password |
+| `SPRING_DATASOURCE_PASSWORD` | `welcome` | Database password |
 | `SPRING_REDIS_HOST` | `localhost` | Redis host |
 | `SPRING_REDIS_PORT` | `6379` | Redis port |
 | `SPRING_RABBITMQ_HOST` | `localhost` | RabbitMQ host |

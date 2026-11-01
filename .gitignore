@@ -13,6 +13,8 @@ node_modules/
 # Production / Build output
 dist/
 dist-ssr/
+target/
+*.jar
 
 # Environment variables & secrets
 .env

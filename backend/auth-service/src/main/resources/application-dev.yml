@@ -1,0 +1,25 @@
+server:
+  port: ${PORT_AUTH_SERVICE:8081}
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:h2:mem:authdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+jwt:
+  secret: ${JWT_SECRET:EnterpriseOcrJwtSecretKey32BytesLongMinimumSecretForSigningHmac256!!}
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+
+seed:
+  admin-password: ${SEED_ADMIN_PASSWORD:password123}
+  user-password: ${SEED_USER_PASSWORD:password123}

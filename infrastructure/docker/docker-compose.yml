@@ -5,13 +5,14 @@ services:
     image: postgres:16-alpine
     container_name: ocr-postgres
     environment:
-      POSTGRES_DB: enterprise_ocr
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: ${POSTGRES_DB:-enterprise_ocr}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-welcome}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ../../migration:/docker-entrypoint-initdb.d:ro
 
   redis:
     image: redis:7-alpine
@@ -31,8 +32,8 @@ services:
     container_name: ocr-minio
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadminpassword
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadminpassword}
     ports:
       - "9000:9000"
       - "9001:9001"

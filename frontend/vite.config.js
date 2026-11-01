@@ -6,6 +6,18 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    host: true
+    host: true,
+    proxy: {
+      '/api/auth': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        secure: false
+      },
+      '/api/ocr': {
+        target: 'http://localhost:8085',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 });

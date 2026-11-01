@@ -14,7 +14,8 @@ export const Header = () => {
     searchQuery, setSearchQuery, 
     isSidebarOpen, setIsSidebarOpen,
     setActivePage,
-    showToast
+    showToast,
+    logoutUser
   } = useApp();
 
   const [showNotifMenu, setShowNotifMenu] = useState(false);
@@ -186,7 +187,7 @@ export const Header = () => {
               </div>
               <div className="border-t border-slate-100 dark:border-slate-800 pt-1">
                 <button 
-                  onClick={() => { setActivePage('login'); setShowProfileMenu(false); showToast('Logged out of system session', 'info'); }}
+                  onClick={() => { setShowProfileMenu(false); logoutUser(); }}
                   className="w-full px-4 py-2 text-left flex items-center space-x-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
                 >
                   <LogOut className="w-4 h-4" />

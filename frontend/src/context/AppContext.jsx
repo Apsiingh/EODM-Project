@@ -6,8 +6,28 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [activePage, setActivePage] = useState('dashboard');
   const [theme, setTheme] = useState('dark'); // 'dark' default for modern executive look
-  const [currentRole, setCurrentRole] = useState('Admin User');
-  const [currentUser, setCurrentUser] = useState(MOCK_USERS[0]);
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('auth_token') || null);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem('auth_user');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        return {
+          id: u.id,
+          name: u.username || 'Alexander Wright',
+          email: u.email,
+          role: u.roles?.[0]?.replace('ROLE_', '') || u.designation || 'Admin User',
+          designation: u.designation,
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          status: u.status || 'Active'
+        };
+      } catch (e) {
+        // Fallback to default
+      }
+    }
+    return MOCK_USERS[0];
+  });
+  const [currentRole, setCurrentRole] = useState(() => currentUser?.role || 'Admin User');
   const [documents, setDocuments] = useState(MOCK_DOCUMENTS);
   const [selectedDocId, setSelectedDocId] = useState('INV-2024-0001');
   const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
@@ -15,6 +35,42 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // Authenticate user & sync state
+  const loginUser = (authData) => {
+    if (authData?.accessToken) {
+      setAuthToken(authData.accessToken);
+    }
+    if (authData?.user) {
+      const u = authData.user;
+      const formattedRole = u.roles?.[0]?.replace('ROLE_', '') || u.designation || 'Admin User';
+      const userObj = {
+        id: u.id,
+        name: u.username || u.email.split('@')[0],
+        email: u.email,
+        role: formattedRole,
+        designation: u.designation || 'Corporate User',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        status: u.status || 'Active'
+      };
+      setCurrentUser(userObj);
+      setCurrentRole(formattedRole);
+    }
+    setActivePage('dashboard');
+    showToast(`Welcome back, ${authData?.user?.username || 'User'}! Authenticated via JWT.`, 'success');
+    logAudit('User Login', `Authenticated session for ${authData?.user?.email || 'User'}`);
+  };
+
+  // Sign out user
+  const logoutUser = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('auth_user');
+    setAuthToken(null);
+    setActivePage('login');
+    showToast('Signed out of system session', 'info');
+    logAudit('User Logout', `Session ended for ${currentUser.email}`);
+  };
 
   // Sync theme class to document elem
   useEffect(() => {
@@ -134,6 +190,9 @@ export const AppProvider = ({ children }) => {
       currentRole,
       currentUser,
       changeRole,
+      authToken,
+      loginUser,
+      logoutUser,
       documents,
       selectedDocId,
       setSelectedDocId,
